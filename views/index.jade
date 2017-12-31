@@ -2,4 +2,26 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome again to #{title}
+
+  button(id="mybutton" value="some value") Click Me
+
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io.connect('http://localhost:3000');
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data sent from browser' });
+    });
+
+    document.getElementById('mybutton').addEventListener('click',clicked);
+    function clicked(e) {
+      console.log('clicked');
+      socket.emit('test','this is the message from client');
+      //fetch("http://localhost:3000/sendmessage?msg=hello there")
+      //.then(function(res) { console.log(res.status); });
+    }
+
+    socket.on('test',function(data){
+      console.log('test',data);
+    })
