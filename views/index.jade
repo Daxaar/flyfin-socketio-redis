@@ -4,6 +4,7 @@ block content
   h1= title
   p Welcome again to #{title}
 
+  input(id="mytext" placeholder="a message")
   button(id="mybutton" value="some value") Click Me
 
   script(src="/socket.io/socket.io.js")
@@ -16,8 +17,9 @@ block content
 
     document.getElementById('mybutton').addEventListener('click',clicked);
     function clicked(e) {
-      console.log('clicked');
-      socket.emit('test','this is the message from client');
+      var msg = document.getElementById('mytext').value;
+      console.log('sending message:',msg);
+      socket.emit('test',msg);
       //fetch("http://localhost:3000/sendmessage?msg=hello there")
       //.then(function(res) { console.log(res.status); });
     }
