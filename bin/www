@@ -20,6 +20,10 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
+var redis = require('redis');
+const url = 'redis://marvin:32769';
+var c1 = redis.createClient(url);
+var c2 = redis.createClient(url);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -39,6 +43,18 @@ io.on('connection', function (socket) {
   });
 });
 
+c1.on('message', function (channel, message) {
+  console.log('we got a message from redis!',message);
+  io.emit('test',message);
+  // c2.hgetall(message, function (err, res) {
+  //   debug(res);
+  //   debug(err);
+  //   //res.key = message;
+  //   io.sockets.emit('emiting from sockets',message);
+  // })
+});
+
+c1.subscribe('arrivals');
 /**
  * Normalize a port into a number, string, or false.
  */
